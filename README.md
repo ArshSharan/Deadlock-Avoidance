@@ -47,7 +47,7 @@ An interactive web-based simulation demonstrating **Deadlock Avoidance** using t
 
 #### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/ArshSharan/Deadlock-Avoidance.git
 cd Deadlock-Avoidance
 ```
 
