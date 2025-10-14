@@ -10,7 +10,7 @@ import json
 from bankers_algorithm import BankersAlgorithm, format_safe_sequence
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for React frontend
+CORS(app, origins=['https://deadlock-avoidance.vercel.app', 'http://localhost:3000'])  # Enable CORS for React frontend
 
 # In-memory storage for logs
 allocation_logs = []
