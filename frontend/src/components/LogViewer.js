@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Download, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
-import { exportLogs } from '../services/api';
+import { FileText, Download, RefreshCw, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { exportLogs, resetSystem } from '../services/api';
 
 const LogViewer = ({ logs, onRefresh }) => {
   const [expanded, setExpanded] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   const handleExport = async () => {
     setExporting(true);
@@ -27,6 +28,23 @@ const LogViewer = ({ logs, onRefresh }) => {
       alert('Failed to export logs. Please try again.');
     } finally {
       setExporting(false);
+    }
+  };
+
+  const handleClearLogs = async () => {
+    if (!window.confirm('Are you sure you want to clear all logs?')) {
+      return;
+    }
+    
+    setClearing(true);
+    try {
+      await resetSystem();
+      onRefresh(); // Refresh to show empty logs
+    } catch (error) {
+      console.error('Failed to clear logs:', error);
+      alert('Failed to clear logs. Please try again.');
+    } finally {
+      setClearing(false);
     }
   };
 
@@ -78,16 +96,26 @@ const LogViewer = ({ logs, onRefresh }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Export Button */}
+            {/* Action Buttons */}
             {logs.length > 0 && (
-              <button
-                onClick={handleExport}
-                disabled={exporting}
-                className="w-full mb-4 btn-secondary flex items-center justify-center space-x-2 text-sm"
-              >
-                <Download size={16} />
-                <span>{exporting ? 'Exporting...' : 'Export as CSV'}</span>
-              </button>
+              <div className="flex gap-2 mb-4">
+                <button
+                  onClick={handleExport}
+                  disabled={exporting}
+                  className="flex-1 btn-secondary flex items-center justify-center space-x-2 text-sm"
+                >
+                  <Download size={16} />
+                  <span>{exporting ? 'Exporting...' : 'Export as CSV'}</span>
+                </button>
+                <button
+                  onClick={handleClearLogs}
+                  disabled={clearing}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Trash2 size={16} />
+                  <span>{clearing ? 'Clearing...' : 'Clear Logs'}</span>
+                </button>
+              </div>
             )}
 
             {/* Logs List */}
