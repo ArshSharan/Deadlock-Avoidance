@@ -13,12 +13,9 @@ const Header = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-            >
+            <div>
               <GraduationCap size={40} />
-            </motion.div>
+            </div>
             <div>
               <h1 className="text-3xl font-bold">College Fest Resource Allocation</h1>
               <p className="text-primary-100 text-sm mt-1">
